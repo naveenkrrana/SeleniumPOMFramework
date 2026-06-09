@@ -1,0 +1,38 @@
+name: Enterprise Hybrid Automation Pipeline
+
+# Run the tests automatically when code is pushed to the master branch
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+  run-automation-tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Codebase
+        uses: actions/checkout@v4
+
+      - name: Setup Java JDK
+        uses: actions/setup-java@v4
+        with:
+          java-version: '26'
+          distribution: 'temurin'
+          # Cache downloaded files so the pipeline runs faster next time
+          cache: 'gradle'
+
+      - name: Make Gradle Executable
+        run: chmod +x gradlew
+
+      - name: Execute UI and API Tests
+        run: ./gradlew clean test
+
+      - name: Upload Test Reports
+        # Always upload the reports so we can debug even if the tests fail
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: Extent-Enterprise-Report
+          path: target/
