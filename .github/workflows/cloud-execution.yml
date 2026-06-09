@@ -3,9 +3,9 @@ name: Enterprise Hybrid Automation Pipeline
 # Run the tests automatically when code is pushed to the master branch
 on:
   push:
-    branches: [ "master" ]
+    branches: [ "main" ]
   pull_request:
-    branches: [ "master" ]
+    branches: [ "main" ]
 
 jobs:
   run-automation-tests:
